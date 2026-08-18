@@ -73,8 +73,8 @@ public class BurgerController {
         return burgerDao.remove(id);
     }
 
-    @GetMapping("/findByPrice")
-    public List<Burger> findByPrice(@RequestParam Double price) {
+    @GetMapping("/findByPrice/{price}")
+    public List<Burger> findByPrice(@PathVariable Double price) {
         log.info("findByPrice endpoint invoked with price: {}", price);
         if (price == null || price < 0) {
             throw new BurgerException("Price must be valid", HttpStatus.BAD_REQUEST);
@@ -82,8 +82,8 @@ public class BurgerController {
         return burgerDao.findByPrice(price);
     }
 
-    @GetMapping("/findByBreadType")
-    public List<Burger> findByBreadType(@RequestParam String breadType) {
+    @GetMapping("/findByBreadType/{breadType}")
+    public List<Burger> findByBreadType(@PathVariable String breadType) {
         log.info("findByBreadType endpoint invoked with breadType: {}", breadType);
         try {
             BreadType type = BreadType.valueOf(breadType.toUpperCase());
@@ -93,8 +93,8 @@ public class BurgerController {
         }
     }
 
-    @GetMapping("/findByContent")
-    public List<Burger> findByContent(@RequestParam String content) {
+    @GetMapping("/findByContent/{content}")
+    public List<Burger> findByContent(@PathVariable String content) {
         log.info("findByContent endpoint invoked with content: {}", content);
         if (content == null || content.trim().isEmpty()) {
             throw new BurgerException("Content cannot be empty", HttpStatus.BAD_REQUEST);
