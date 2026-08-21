@@ -6,7 +6,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import com.workintech.s18d1.exceptions.BurgerException;
 
 import java.util.List;
 
@@ -29,7 +31,11 @@ public class BurgerDaoImpl implements BurgerDao {
 
     @Override
     public Burger findById(long id) {
-        return entityManager.find(Burger.class, id);
+        Burger burger = entityManager.find(Burger.class, id);
+        if (burger == null) {
+            throw new BurgerException("Burger not found: " + id, HttpStatus.NOT_FOUND);
+        }
+        return burger;
     }
 
     @Override
@@ -69,9 +75,7 @@ public class BurgerDaoImpl implements BurgerDao {
     @Transactional
     public Burger remove(long id) {
         Burger burger = findById(id);
-        if (burger != null) {
-            entityManager.remove(burger);
-        }
+        entityManager.remove(burger);
         return burger;
     }
 }
