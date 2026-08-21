@@ -66,7 +66,6 @@ public class BurgerController {
     public Burger update(@RequestBody Burger burger) {
         log.info("update endpoint invoked with burger: {}", burger);
         BurgerValidation.checkId(burger.getId());
-        BurgerValidation.checkBurgerParams(burger.getName(), burger.getPrice(), burger.getContents());
         return burgerDao.update(burger);
     }
 
@@ -74,10 +73,6 @@ public class BurgerController {
     public Burger remove(@PathVariable Long id) {
         log.info("remove endpoint invoked with id: {}", id);
         BurgerValidation.checkId(id);
-        Burger burger = burgerDao.findById(id);
-        if (burger == null) {
-            throw new BurgerException("Burger with given id not found: " + id, HttpStatus.NOT_FOUND);
-        }
         return burgerDao.remove(id);
     }
 
