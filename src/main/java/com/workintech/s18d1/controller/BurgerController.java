@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/workintech/burgers")
+@RequestMapping({"/burger", "/workintech/burgers"})
 public class BurgerController {
 
     private final BurgerDao burgerDao;
@@ -62,6 +62,14 @@ public class BurgerController {
         return burgerDao.update(burger);
     }
 
+    @PutMapping
+    public Burger update(@RequestBody Burger burger) {
+        log.info("update endpoint invoked with burger: {}", burger);
+        BurgerValidation.checkId(burger.getId());
+        BurgerValidation.checkBurgerParams(burger.getName(), burger.getPrice(), burger.getContents());
+        return burgerDao.update(burger);
+    }
+
     @DeleteMapping("/{id}")
     public Burger remove(@PathVariable Long id) {
         log.info("remove endpoint invoked with id: {}", id);
@@ -73,7 +81,7 @@ public class BurgerController {
         return burgerDao.remove(id);
     }
 
-    @GetMapping("/findByPrice/{price}")
+    @GetMapping({"/findByPrice/{price}", "/price/{price}"})
     public List<Burger> findByPrice(@PathVariable Double price) {
         log.info("findByPrice endpoint invoked with price: {}", price);
         if (price == null || price < 0) {
@@ -82,7 +90,7 @@ public class BurgerController {
         return burgerDao.findByPrice(price);
     }
 
-    @GetMapping("/findByBreadType/{breadType}")
+    @GetMapping({"/findByBreadType/{breadType}", "/breadType/{breadType}"})
     public List<Burger> findByBreadType(@PathVariable String breadType) {
         log.info("findByBreadType endpoint invoked with breadType: {}", breadType);
         try {
@@ -93,7 +101,7 @@ public class BurgerController {
         }
     }
 
-    @GetMapping("/findByContent/{content}")
+    @GetMapping({"/findByContent/{content}", "/content/{content}"})
     public List<Burger> findByContent(@PathVariable String content) {
         log.info("findByContent endpoint invoked with content: {}", content);
         if (content == null || content.trim().isEmpty()) {

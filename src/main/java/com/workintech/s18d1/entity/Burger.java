@@ -30,4 +30,5 @@ public class Burger {
     private BreadType breadType;
 
     @Column(name = "contents")
-    private String contents; 
+    private String contents;
+}
